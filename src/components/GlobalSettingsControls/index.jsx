@@ -33,7 +33,7 @@ export const LayoutControl = () => {
 
     return (
         <div>
-            {
+            {/* {
                 isLayoutEditable ?
                     <Button onClick={() => toggleLayoutEditable()}>
                         <i className="icon icon-save" /> Save
@@ -42,28 +42,20 @@ export const LayoutControl = () => {
                     <Button onClick={() => toggleLayoutEditable()}>
                         <i className="icon icon-edit"></i> Edit
                     </Button>
-            }
+            } */}
         </div>
     )
 }
 
-export const ThemeControl = () => {
-    const {isDarkMode, toggleDarkMode} = useInterfaceContext();
-    return (
-        <Button onClick={() => toggleDarkMode()}>
-            <i className={`icon icon-${isDarkMode ? 'sun' : 'moon'}`}/>
-            <span>{isDarkMode ? 'Light' : 'Dark'} theme</span>
-        </Button>
-    );
-}
+
 
 export const ContrastControl = () => {
     const {isContrastMode, toggleContrastMode} = useInterfaceContext();
 
     return (
         <Button onClick={() => toggleContrastMode()}>
-            <i className="icon icon-glasses"></i>
-            <span>{isContrastMode ? 'Decrease' : 'Increase'} contrast</span>
+            {/* <i className="icon icon-glasses"></i>
+            <span>{isContrastMode ? 'Decrease' : 'Increase'} contrast</span> */}
         </Button>
     );
 }
@@ -75,7 +67,7 @@ export const ScaleControl = () => {
 
     return (
         <ScaleWrapper>
-            <Button as="span" className="button disabled">
+            {/* <Button as="span" className="button disabled">
                 <i className="icon icon-font"></i> Font size
             </Button>
             <RangeSlider value={fontScale} min={1} max={1.2} step={0.05} label={`${fontScale}x`}
@@ -101,9 +93,18 @@ export const ScaleControl = () => {
                                  backgroundColor: theme === 'light' ? colors.gray : colors.dark,
                              }
                          }}
-            />
+            /> */}
         </ScaleWrapper>
 
+    );
+}
+export const ThemeControl = () => {
+    const {isDarkMode, toggleDarkMode} = useInterfaceContext();
+    return (
+        <Button onClick={() => toggleDarkMode()}>
+            {/* <i className={`icon icon-${isDarkMode ? 'sun' : 'moon'}`}/>
+            <span>{isDarkMode ? 'Light' : 'Dark'} theme</span> */}
+        </Button>
     );
 }
 
@@ -127,8 +128,8 @@ export const FullscreenControl = () => {
 
     return (
         <Button onClick={handleFullscreen}>
-            <i className="icon icon-expand-regular"></i>
-            <span>{isFullscreen ? 'Normal' : 'Fullscreen'}</span>
+            {/* <i className="icon icon-expand-regular"></i>
+            <span>{isFullscreen ? 'Normal' : 'Fullscreen'}</span> */}
         </Button>
     )
 }
@@ -138,8 +139,8 @@ export const DirectionControl = () => {
 
     return (
         <Button onClick={toggleDirection}>
-            <i className="icon icon-book-open"/>
-            <span>{direction === 'ltr' ? 'RTL' : 'LTR'}</span>
+            {/* <i className="icon icon-book-open"/>
+            <span>{direction === 'ltr' ? 'RTL' : 'LTR'}</span> */}
         </Button>
     )
 }

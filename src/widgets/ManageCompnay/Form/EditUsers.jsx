@@ -4,29 +4,10 @@ import React, { useState,useEffect } from "react";
 import axios from "axios";
 const EditUser = ({ user, handleClose, open }) => {
 
-    console.log(user,'users edit..............')
-  // State variables to manage user data for editing
-//   const [name, setName] = useState(user.name || '');
-//   const [email, setEmail] = useState(user.email || '');
-//   const [status, setStatus] = useState(user.status || '');
-//   const [lastLogin, setLastLogin] = useState(user.lastLogin || '');
 
-  // Function to handle form submission for editing
-//   const handleEdit = () => {
-//     // Implement your logic here to perform the edit operation
-//     // You can make an API call to update the user data in the database
-//     // For this example, let's just log the edited data
-//     console.log({
-//       id: user.id,
-//       name: name,
-//       email: email,
-//       status: status,
-//       lastLogin: lastLogin,
-//     });
+ 
+    console.log(user?.name,'dddddddddddddddddddddddddusers edit..............')
 
-//     // Close the dialog after successful edit
-//     handleClose();
-//   };
 
 const [items, setItems] = useState([]);
 useEffect(() => {
@@ -81,6 +62,7 @@ const handleAPICall = () => {
 const [companyId, setCompanyId] = useState("1");
 const [companyName, setCompanyName] = useState();
 
+
 const CompnaynameChange = (event) => {
   event.preventDefault();
   setCompanyName(event.target.value);
@@ -104,7 +86,7 @@ const AddressChange = (e) => {
   setaddress(e.target.value);
 };
 
-const [lname, setLname] = useState();
+const [lname, setLname] = useState( );
 const  ChangeLastname = (e) => {
     setLname(e.target.value);
 };
@@ -124,16 +106,17 @@ const  ChangeLastname = (e) => {
       <form name="username_change" method="post" style={{paddingLeft:' 15px', paddingRight:'15px'}}>
           <Box mt={2}>
             <TextField
-              id="username_change_email"
-              name="username_change[email]"
+              id="username"
+              name="username"
               label="First Name"
               variant="outlined"
-              value={companyName}
+              value={companyName|| user?.name }
               onChange={CompnaynameChange}
               fullWidth
-              required
-              defaultValue=""
+             
+           
             />
+            
           </Box>
 
           <Box mt={2}>
@@ -143,7 +126,7 @@ const  ChangeLastname = (e) => {
               label="Last Name"
               variant="outlined"
               
-              value={lname}
+              value={lname || user?.lname}
               onChange={ChangeLastname}
               fullWidth
               required
@@ -156,7 +139,7 @@ const  ChangeLastname = (e) => {
               name="username_change[username]"
               label="Email ID"
               variant="outlined"
-              value={email}
+              value={email || user?.email}
               onChange={ChangeEmail}
               fullWidth
               required
@@ -169,11 +152,12 @@ const  ChangeLastname = (e) => {
               name="username_change[username]"
               label="Phone"
               variant="outlined"
-              value={phone}
+              value={phone || user?.phone}
               onChange={ChangePhone}
               fullWidth
               required
-              defaultValue=""
+              inputProps={{ maxLength: 12 }}
+             
             />
           </Box>
           {/* <Box mt={2}>

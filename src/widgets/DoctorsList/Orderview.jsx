@@ -87,11 +87,11 @@ const OrderView = ({ variant }) => {
   const [hasMore, setHasMore] = useState(true); // For infinite scrolling
   const [currentPage, setCurrentPage] = useState(1); // For pagination
 
-  console.log(products, "products========================");
+  console.log(products, "order view========================");
   const itemsPerPage = 10; // Number of items per page
   useEffect(() => {
     // Fetch data from the API
-    const token = "3691|dVlgSacqhxeyluycbpjRwulO1cETYyxZXwlxF5Au";
+    const token = JSON.parse(localStorage.getItem("token"));
 
     axios
       .get("https://medical.studiomyraa.com/api/view_order_in_provider/1", {

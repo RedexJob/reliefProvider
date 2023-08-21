@@ -15,6 +15,8 @@ import {EffectFade} from 'swiper';
 // utils
 import {nanoid} from 'nanoid';
 
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
 // hooks
 import useWindowSize from '@hooks/useWindowSize';
 import {useState, useEffect} from 'react';
@@ -70,9 +72,14 @@ const LaboratoryTests = () => {
 
     return (
         <Widget name="LaboratoryTests">
-            <WidgetNav title="Laboratory Tests" handler={handleNav} style={{paddingBottom: 16}} />
+            <WidgetNav title="Unread message" handler={handleNav} style={{paddingBottom: 16}} />
             <WidgetBody style={{paddingBottom: 18}}>
-                <Wrapper>
+            <div style={{  position: 'absolute', margin :'-17px', top: '50%', left: '50%'}}>
+          <Badge badgeContent={4} color="primary">
+            <MailIcon color="action" style={{width:'50px', height:'50px'}} />
+          </Badge>
+        </div>
+                {/* <Wrapper>
                     <Swiper onSwiper={(swiper) => setSwiper(swiper)}
                             modules={[EffectFade]}
                             effect="fade"
@@ -102,7 +109,7 @@ const LaboratoryTests = () => {
                         <Pill text={window.width < 413.98 ? "Contacts" : "Contact patient"} />
                     </div>
                     <Pill text="Archive" icon="check" />
-                </Footer>
+                </Footer> */}
             </WidgetBody>
         </Widget>
     )

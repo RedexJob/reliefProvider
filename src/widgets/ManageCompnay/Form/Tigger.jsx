@@ -1,7 +1,6 @@
 // import React, { useState } from "react";
 // import axios from "axios";
 
-
 // import {
 //     Box,
 //     Button,
@@ -20,10 +19,10 @@
 //         const response = await axios.post("https://medical.studiomyraa.com/api/add_providers_thankyoupage", data, {
 //           headers: {
 //             "Content-Type": "multipart/form-data",
-//             Authorization: ` Bearer ${token}` 
+//             Authorization: ` Bearer ${token}`
 //           },
 //         });
-  
+
 //         // Handle the API response here if needed
 //         console.log(response.data);
 //       } catch (error) {
@@ -31,21 +30,18 @@
 //         console.error(error);
 //       }
 //     };
-  
+
 //     // Add your logic to trigger the API call when needed.
 //     // For example, if you have a button to initiate the API call:
-  
+
 //     const handleAPICall = () => {
 //       // Prepare your form data to send in the API call (if needed)
 //       const formData = new FormData();
 //       formData.append("content", companyName);
 //       formData.append("provider_company_id", companyId);
 
-
-    
 //       makeAPICall(formData);
 //     };
-
 
 // const [companyId, setCompanyId] = useState('1')
 //     const [companyName, setCompanyName] = useState()
@@ -55,10 +51,8 @@
 //       setCompanyName(event.target.value)
 //     }
 
-
-    
 //   return (
-//     <>           
+//     <>
 //               <CardContent>
 //                 <Typography variant="h5">Thank You Page</Typography>
 //                 <form name="username_change" method="post">
@@ -95,7 +89,6 @@
 
 // export default ThankYou;
 
-
 // styled components
 import { Header } from "@components/Widget/style";
 import React from "react";
@@ -127,11 +120,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import CreateTigger from './CreateTigger'
-import UpdateThankYou from "./UpdateThankYou";
+import CreateTigger from "./CreateTigger";
+import EditTigger from "./EditTigger";
 function Tigger() {
-
-      // modal open state here.......
+  // modal open state here.......
   const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState("sm");
@@ -144,49 +136,58 @@ function Tigger() {
     setOpen(true);
   };
 
-    // State variables to manage selected user and edit dialog open state
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [editDialogOpen, setEditDialogOpen] = useState(false);
-  
-    // Function to handle opening the edit dialog for a particular user
-    const handleEditUser = (user) => {
-      setSelectedUser(user);
-      setEditDialogOpen(true);
-    };
+  // State variables to manage selected user and edit dialog open state
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-    const [products, setProductData] = useState([]);
+  // Function to handle opening the edit dialog for a particular user
+  const handleEditUser = (user) => {
+    setSelectedUser(user);
+    setEditDialogOpen(true);
+  };
 
-    console.log(products,'products')
+  const [products, setProductData] = useState([]);
 
- 
-    useEffect(() => {
-        // Fetch data from the API
-        const items = JSON.parse(localStorage.getItem("token"));
-        axios
-          .get("https://medical.studiomyraa.com/api/get_providers_trigger/1", {
-            headers: { Authorization: ` Bearer ${items}` },
-          })
-          .then((response) => {
-            console.log(response.data.result, "rrrrrrrrrrrrrrrrrrr");
-            if (response.data.result && Array.isArray(response.data.result)) {
-              // Update the products state with the fetched data
-              setProductData(response.data.result);
-            } else {
-              console.error("Invalid API response format:", response.data);
-              setProductData([]);
-            }
-            // setProductData(response?.data);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
-      }, []);
+  console.log(products, "products");
+
+  useEffect(() => {
+    // Fetch data from the API
+    const items = JSON.parse(localStorage.getItem("token"));
+    axios
+      .get("https://medical.studiomyraa.com/api/get_providers_trigger/1", {
+        headers: { Authorization: ` Bearer ${items}` },
+      })
+      .then((response) => {
+        console.log(response.data.result, "rrrrrrrrrrrrrrrrrrr");
+        if (response.data.result && Array.isArray(response.data.result)) {
+          // Update the products state with the fetched data
+          setProductData(response.data.result);
+        } else {
+          console.error("Invalid API response format:", response.data);
+          setProductData([]);
+        }
+        // setProductData(response?.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <>
       <Widget name="PatientsList">
+        <Button
+          variant="contained"
+          color="success"
+          onClick={handleClickOpen}
+          style={{ marginRight: "87rem" }}
+        >
+         Create
+        </Button>
         <WidgetBody style={{ padding: 0 }}>
-          <Typography variant="h6" style={{marginLeft:'15px'}} >Triggers</Typography>
+          {/* <Typography variant="h6" style={{ marginLeft: "15px" }}>
+            Triggers
+          </Typography> */}
           <div className="card-body">
             <Table sx={{ minWidth: 650 }} className="table table-bordered">
               <TableHead>
@@ -198,51 +199,47 @@ function Tigger() {
                   </TableCell>
                   <TableCell>
                     <TableSortLabel active={false} direction="asc">
-                    Description	
+                      Description
                     </TableSortLabel>
                   </TableCell>
                   <TableCell>
                     <TableSortLabel active={false} direction="asc">
-                   Action	
+                      Action
                     </TableSortLabel>
                   </TableCell>
-                 
                 </TableRow>
               </TableHead>
 
               <TableBody>
-              {products.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell >{product.triggerName}</TableCell>
-                  <TableCell>{product.description}</TableCell>
-             
-                  
+                {products.map((product) => (
+                  <TableRow key={product.id}>
+                    <TableCell>{product.triggerName}</TableCell>
+                    <TableCell>{product.description}</TableCell>
 
-                  <TableCell>
-                    <Button variant="contained" color="success"
+                    <TableCell>
+                      {/* <Button variant="contained" color="success"
                       onClick={handleClickOpen}
                     >
                       Add
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ marginLeft: "5px" }}
-                      onClick={() => handleEditUser(product)}
-                    >
-                      Edit
-                    </Button>
-                   
-                  </TableCell>
-                </TableRow>
-                 ))}
+                    </Button> */}
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginLeft: "5px" }}
+                        onClick={() => handleEditUser(product)}
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
 
             <br />
           </div>
 
-          <UpdateThankYou
+          <EditTigger
             user={selectedUser}
             handleClose={() => setEditDialogOpen(false)}
             open={editDialogOpen}

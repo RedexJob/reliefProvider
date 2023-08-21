@@ -39,12 +39,12 @@ const Panel = () => {
                     </div>
                 )
             }
-            <Search>
+            {/* <Search>
                 <Input type="search" id="globalSearch" placeholder={width < 414 ? 'Search' : 'Search patients or doctors'}/>
                 <Label htmlFor="globalSearch">
                     <i className="icon icon-search"></i>
                 </Label>
-            </Search>
+            </Search> */}
             {
                 isMobile ?
                     <MenuButton/>

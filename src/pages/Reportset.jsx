@@ -1,288 +1,442 @@
+// styled components
+import { List, Header } from "@widgets/PatientsTests/style";
+import axios from "axios";
+import DatePicker from "react-datepicker";
 // components
+import Widget from "@components/Widget";
+import WidgetBody from "@components/Widget/WidgetBody";
+import CustomSelect from "@ui/Select";
+import MonthNavigator from "@ui/Navigator/MonthNavigator";
+import SearchBar from "@ui/SearchBar";
+import TestItem from "@components/TestItem";
+import GroupSeparator from "@ui/GroupSeparator";
+import NoDataPlaceholder from "@components/NoDataPlaceholder";
+
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useDemoData } from "@mui/x-data-grid-generator";
+
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import moment from "moment";
+
+import Box from "@mui/material/Box";
+// utils
+import { testsOptions } from "@constants/options";
+
+// hooks
+import { useEffect, useRef, useState } from "react";
+
+// data placeholder
+import { patient_tests } from "@db/patient_tests";
+
+// bootstrap
+
 import Page from "@layout/Page";
-import NextPatient from "@widgets/NextPatient";
-import LaboratoryTests from "@widgets/LaboratoryTests";
-import UpcomingAppointments from "@widgets/UpcomingAppointments";
-import DoctorOverallAppointment from "@widgets/DoctorOverallAppointment";
-import PatientsPace from "@widgets/PatientsPace";
-import RecentQuestions from "@widgets/RecentQuestions";
-import ConfirmedDiagnoses from "@widgets/ConfirmedDiagnoses";
-import EventsCompactCalendar from "@widgets/EventsCompactCalendar";
-import DailyAppointmentChart from "@widgets/DailyAppointmentChart";
+
 import {
-  Box,
-  Container,
-  Grid,
-  Breadcrumbs,
-  Card,
-  CardContent,
-  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
   Select,
   MenuItem,
   Button,
+  Grid,
   Table,
   TableHead,
+  TableBody,
   TableRow,
   TableCell,
-  TableBody,
+  TableSortLabel,
 } from "@mui/material";
+
 const Reportset = () => {
+  const contentRef = useRef(null);
+  const currentMonth = new Date().getMonth();
+  const [category, setCategory] = useState(testsOptions[0]);
+  const [month, setMonth] = useState({
+    label: "This month",
+    number: currentMonth,
+  });
+  const [search, setSearch] = useState("");
+  const uniqueDates = [
+    ...new Set(
+      patient_tests.map((item) => moment(item.date).format("DD MMM YYYY"))
+    ),
+  ];
+
+  const filteredTests = patient_tests.filter((test) => {
+    const testDate = new Date(test.date);
+    const testMonth = testDate.getMonth();
+    const testName = test.title.toLowerCase();
+    const testCategory = test.type.toLowerCase();
+    const doctorName = test.doctor.toLowerCase();
+    const queryMatch =
+      testName.includes(search.toLowerCase()) ||
+      doctorName.includes(search.toLowerCase());
+    const categoryMatch =
+      category.value === "all" || testCategory === category.value;
+
+    return testMonth === month.number && queryMatch && categoryMatch;
+  });
+
+  const drawTests = () => {
+    return uniqueDates.map((date) => {
+      const tests = filteredTests.filter(
+        (test) => moment(test.date).format("DD MMM YYYY") === date
+      );
+      const isToday = moment(date).isSame(new Date(), "day");
+
+      return (
+        tests.length !== 0 &&
+        new Date(date).getMonth() === month.number && (
+          <div key={date}>
+            <GroupSeparator text={isToday ? "Today's visit" : date} />
+            <List>
+              {tests.map((test) => (
+                <TestItem
+                  key={`${test.id}-${search}-${category.value}`}
+                  data={test}
+                />
+              ))}
+            </List>
+          </div>
+        )
+      );
+    });
+  };
+
+  useEffect(() => {
+    contentRef.current?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [month, search]);
+
+  const [products, setProductData] = useState([]);
+
+  console.log(products, "patientData");
+
+  const handleAPICall = async (event) => {
+    event.preventDefault();
+    setHide(true)
+    const formData = new FormData();
+    formData.append(
+      "start_date",
+      selectedDate1.toLocaleDateString("en-GB")
+        ? selectedDate1.toLocaleDateString("en-GB")
+        : ""
+    );
+    formData.append(
+      "end_date",
+      selectedDate2.toLocaleDateString("en-GB")
+        ? selectedDate2.toLocaleDateString("en-GB")
+        : ""
+    );
+    formData.append("user", selectedProvider ? selectedProvider : "");
+    formData.append("event_name", eventName ? eventName : "");
+
+    const items = JSON.parse(localStorage.getItem("token"));
+    axios
+      .post("https://medical.studiomyraa.com/api/activity_report", formData, {
+        headers: {
+          Accept: "application/json",
+          Authorization: ` Bearer ${items}`,
+        },
+      })
+      .then((response) => {
+        if (response.data.data && Array.isArray(response.data.data)) {
+          // Update the products state with the fetched data
+          setProductData(response.data.data);
+        } else {
+          console.error("Invalid API response format:", response.data);
+          setProductData([]);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const [name, setName] = useState();
+  const Changename = (e) => {
+    setName(e.target.value);
+  };
+
+  // const [dateState, setDateState] = useState(new Date());
+
+  // console.log(dateState, "dateState.....");
+  // const changeDate = (e) => {
+  //   setDateState(e);
+  // };
+
+  // const [selectedDate, setSelectedDate] = useState(new Date());
+  // const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  // const handleDateChange = (date) => {
+  //   setSelectedDate(date);
+  //   setIsCalendarOpen(false); // Close the calendar after selecting a date
+  // };
+
+  // const handleInputClick = () => {
+  //   setIsCalendarOpen(true);
+  // };
+
+  const [selectedDate1, setSelectedDate1] = useState(new Date());
+  const [selectedDate2, setSelectedDate2] = useState(new Date());
+  const [isCalendarOpen1, setIsCalendarOpen1] = useState(false);
+  const [isCalendarOpen2, setIsCalendarOpen2] = useState(false);
+
+  console.log(selectedDate1, "selectedDate1");
+  console.log(selectedDate2, "selectedDate2");
+  const handleDateChange1 = (date) => {
+    setSelectedDate1(date);
+    setIsCalendarOpen1(false);
+  };
+
+  const handleDateChange2 = (date) => {
+    setSelectedDate2(date);
+    setIsCalendarOpen2(false);
+  };
+
+  const handleInputClick1 = () => {
+    setIsCalendarOpen1(!isCalendarOpen1);
+  };
+
+  const handleInputClick2 = () => {
+    setIsCalendarOpen2(!isCalendarOpen2);
+  };
+
+  // dropdown API integrated
+  const [providers, setProviders] = useState([]);
+  const [selectedProvider, setSelectedProvider] = useState("");
+
+  useEffect(() => {
+    
+    const items = JSON.parse(localStorage.getItem("token"));
+    // Fetch data from the API
+    axios
+      .get("https://medical.studiomyraa.com/api/provider_list",{   headers: {
+        Accept: "application/json",
+        Authorization: ` Bearer ${items}`,
+      },})
+      .then((response) => {
+        console.log(response,'resppppppppppppp')
+        setProviders(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching providers:", error);
+      });
+  }, []);
+
+  const handleProviderChange = (event) => {
+    setSelectedProvider(event.target.value);
+  };
+
+
+  const [eventName,setEventName] = useState()
+  
+  const ChangeeventName =(event) =>{
+  
+   console.log(event.target.value,' name for ')
+    setEventName(event.target.value)
+  }
+
+  const [hide, setHide] = useState(false)
   return (
-    <Page title="Reports">
-      <Container>
-        <Card>
-          <CardContent>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              mt={2}
-            ></Box>
-            <Typography variant="h4" component="h3" mt={2}>
-              Activity Report
-            </Typography>
-            <Typography variant="body1" mt={1}>
-              View a list of all activity by employees of your company.
-            </Typography>
-          </CardContent>
-        </Card>
+    <Page title="Activity Report">
+      <Widget name="PatientsTests">
+        <WidgetBody style={{ padding: 18 }} elRef={contentRef}>
+          {/* {filteredTests.length !== 0 ? drawTests() : <NoDataPlaceholder/>} */}
 
-        <Card>
-          <CardContent>
-            {/* <Typography variant="h3" component="h5" mt={2}>
-              Activity Report
-            </Typography> */}
-            <form name="form" method="get">
-            
-              <Box mt={2} display="flex" alignItems="center">
-                
-                <Box mr={4}>
-                  <Grid item xs={12} md={6}>
-                    <fieldset>
-                      <legend>Start Date</legend>
+          <form name="patient_search" method="get">
+            <Grid container spacing={2}>
+              {/* <>
+                <Calendar value={dateState} onChange={changeDate} />
+                <p>
+                  Current selected date is{" "}
+                  <b>{moment(dateState).format("MMMM Do YYYY")}</b>
+                </p>
+              </> */}
 
-                      <Select
-                        id="form_start_month"
-                        name="form[start][month]"
-                        value="6"
-                        variant="outlined"
-                      >
-                        <MenuItem value="1">Jan</MenuItem>
-                        <MenuItem value="2">Feb</MenuItem>
-                        <MenuItem value="3">Mar</MenuItem>
-                        <MenuItem value="4">Apr</MenuItem>
-                        <MenuItem value="5">May</MenuItem>
-                        <MenuItem value="6">Jun</MenuItem>
-                        <MenuItem value="7">Jul</MenuItem>
-                        <MenuItem value="8">Aug</MenuItem>
-                        <MenuItem value="9">Sep</MenuItem>
-                        <MenuItem value="10">Oct</MenuItem>
-                        <MenuItem value="11">Nov</MenuItem>
-                        <MenuItem value="12">Dec</MenuItem>
-                      </Select>
-                      <Select
-                        id="form_start_day"
-                        name="form[start][day]"
-                        value="21"
-                        variant="outlined"
-                       style={{width:'50px'}}
-                      >
-                        <MenuItem value="1">1</MenuItem>
-                        <MenuItem value="2">2</MenuItem>
-                        <MenuItem value="3">3</MenuItem>
-                        <MenuItem value="4">4</MenuItem>
-                        <MenuItem value="5">5</MenuItem>
-                        <MenuItem value="6">6</MenuItem>
-                        <MenuItem value="7">7</MenuItem>
-                        <MenuItem value="8">8</MenuItem>
-                        <MenuItem value="9">9</MenuItem>
-                        <MenuItem value="10">10</MenuItem>
-                        <MenuItem value="11">11</MenuItem>
-                        <MenuItem value="12">12</MenuItem>
-                      </Select>
-                      <Select
-                        id="form_start_year"
-                        name="form[start][year]"
-                        value="2023"
-                        variant="outlined"
-                      >
-                        <MenuItem value="1">2021</MenuItem>
-                        <MenuItem value="2">2022</MenuItem>
-                        <MenuItem value="3">2023</MenuItem>
-                        <MenuItem value="4">2024</MenuItem>
-                        <MenuItem value="5">2025</MenuItem>
-                        <MenuItem value="6">2026</MenuItem>
-                        <MenuItem value="7">2027</MenuItem>
-                        <MenuItem value="8">2028</MenuItem>
-                        <MenuItem value="9">2029</MenuItem>
-                        <MenuItem value="10">2030</MenuItem>
-                        <MenuItem value="11">2031</MenuItem>
-                     
-                      </Select>
-                    </fieldset>
-                  </Grid>
-                </Box>
-                
-                <Box mr={4}>
-                  <fieldset>
-                    <legend>Stop Date</legend>
-                    <Select
-                      id="form_stop_month"
-                      name="form[stop][month]"
-                      value="7"
-                      variant="outlined"
-                    >
-                      {/* Options for months */}
-                    </Select>
-                    <Select
-                      id="form_stop_day"
-                      name="form[stop][day]"
-                      value="21"
-                      variant="outlined"
-                    >
-                      {/* Options for days */}
-                    </Select>
-                    <Select
-                      id="form_stop_year"
-                      name="form[stop][year]"
-                      value="2023"
-                      variant="outlined"
-                    >
-                      {/* Options for years */}
-                    </Select>
-                  </fieldset>
-                </Box>
+              <Grid item xs={12} md={3}>
+                <div>
+                  <TextField
+                    type="text"
+                    label="Start date"
+                    id="patient_search_firstName"
+                    name="patient_search[firstName]"
+                    variant="outlined"
+                    fullWidth
+                    value={selectedDate1.toLocaleDateString("en-GB")}
+                    onClick={handleInputClick1}
+                  />
+                  {isCalendarOpen1 && (
+                    <Calendar
+                      onChange={handleDateChange1}
+                      value={selectedDate1}
+                      onClickDay={() => setIsCalendarOpen1(false)}
+                    />
+                  )}
+                </div>
+              </Grid>
 
+              <Grid item xs={12} md={3}>
+                <div>
+                  <TextField
+                    type="text"
+                    label="End date"
+                    id="patient_searc"
+                    name="patient_search[firstName]"
+                    variant="outlined"
+                    fullWidth
+                    value={selectedDate2.toLocaleDateString("en-GB")}
+                    onClick={handleInputClick2}
+                  />
+                  {isCalendarOpen2 && (
+                    <Calendar
+                      onChange={handleDateChange2}
+                      value={selectedDate2}
+                      onClickDay={() => setIsCalendarOpen2(false)}
+                    />
+                  )}
+                </div>
+              </Grid>
+              {/* working here  */}
+              {/* <Grid item xs={12} md={3}>
+                <div>
+                  <TextField
+                    label="End date"
+                    id="patient_search_firstName"
+                    name="patient_search[firstName]"
+                    variant="outlined"
+                    value={selectedDate.toLocaleDateString("en-GB")} // Format the date as dd/mm/yyyy
+                    onClick={handleInputClick}
+                    fullWidth
+                  />
+                  {isCalendarOpen && (
+                    <Calendar
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      onClickOutside={() => setIsCalendarOpen(false)} // Close the calendar on outside click
+                    />
+                  )}
+                </div>
+              </Grid> */}
 
-
-                <Box mr={4}>
-
-                  <div className="form-group">
-                  <legend>User</legend>
-                    {/* <label htmlFor="form_providerUser">User</label> */}
-                    <Select
-                      id="form_providerUser"
-                      name="form[providerUser]"
-                      value=""
-                      variant="outlined"
-                      style={{width:'90px'}}
-                    >
-                      <MenuItem value=""></MenuItem>
-                      <MenuItem value="1">Demo Provider</MenuItem>
-                      <MenuItem value="2">boby baislA</MenuItem>
-                    </Select>
-                  </div>
-                </Box>
-
-                <Box mr={4}>
-                  <div className="form-group">
-                  <legend>Event Name</legend>
-                    {/* <label htmlFor="form_event">Event Name</label> */}
-                    <Select
-                      id="form_event"
-                      name="form[event]"
-                      value=""
-                      variant="outlined"
-                      style={{width:'90px'}}
-                    >
-                      <MenuItem value=""></MenuItem>
-                      <MenuItem value="provider.email_template.created">
-                        provider.email_template.created
+              <Grid item xs={12} md={3}>
+                {/* <FormControl fullWidth variant="outlined">
+                  <InputLabel htmlFor="patient_search_gender">
+                    User
+                  </InputLabel>
+                  <Select
+                    label="Gender"
+                    id="patient_search_gender"
+                    name="patient_search[gender]"
+                    defaultValue=""
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="1">demo provider</MenuItem>
+                    <MenuItem value="2">body basic</MenuItem>
+                    <MenuItem value="3">testing </MenuItem>
+                  </Select>
+                </FormControl> */}
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel htmlFor="provider_select">Provider</InputLabel>
+                  <Select
+                    label="Provider"
+                    id="provider_select"
+                    value={selectedProvider}
+                    onChange={handleProviderChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {providers.map((provider) => (
+                      <MenuItem key={provider.id} value={provider.id}>
+                        {provider.name}
                       </MenuItem>
-                      <MenuItem value="provider.email_template.deleted">
-                        provider.email_template.deleted
-                      </MenuItem>
-                      <MenuItem value="provider.email_template.modified">
-                        provider.email_template.modified
-                      </MenuItem>
-                      <MenuItem value="provider.employee.created">
-                        provider.employee.created
-                      </MenuItem>
-                    </Select>
-                  </div>
-                </Box>
-              </Box>
-              <br/>
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-               
-              >
-                Filter Results
-              </Button>
-              <input
-                type="hidden"
-                id="form__token"
-                name="form[_token]"
-                value="OLI7iix-ahp_FAh67hLy6ku3NuGIx1_Qc75F2cZdfoY"
-              />
-            </form>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            {/* <Typography variant="body1">4 total records found</Typography> */}
+              <Grid item xs={12} md={3}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel htmlFor="patient_search_gender">
+                    Event Name
+                  </InputLabel>
+                  <Select
+                    label="Gender"
+                    id="patient_search_gender"
+                    name="Event_name"
+                    value={eventName}
+                    onChange={ChangeeventName}
+                  
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="inserted">Created</MenuItem>
+                    <MenuItem value="Updated">Updated</MenuItem>
+                    <MenuItem value="deleted">deleted</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <a
-                      href="/providers/dashboard/reports/activity?sort=ph.created&direction=asc&page=1"
-                      title="Date"
-                    >
-                      Date
-                    </a>
-                    <i className="fa fa-sort"></i>
-                  </TableCell>
-                  <TableCell>Employee</TableCell>
-                  <TableCell>
-                    <a
-                      href="/providers/dashboard/reports/activity?sort=ph.event&direction=asc&page=1"
-                      title="Event"
-                    >
-                      Event
-                    </a>
-                    <i className="fa fa-sort"></i>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>07/18/2023 2:35AM</TableCell>
-                  <TableCell>boby baislA</TableCell>
-                  <TableCell>
-                    <i className="fa fa-info-circle"></i>{" "}
-                    provider.email_template.deleted
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>07/18/2023 2:35AM</TableCell>
-                  <TableCell>boby baislA</TableCell>
-                  <TableCell>
-                    <i className="fa fa-info-circle"></i>{" "}
-                    provider.email_template.modified
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>07/18/2023 2:35AM</TableCell>
-                  <TableCell>boby baislA</TableCell>
-                  <TableCell>
-                    <i className="fa fa-info-circle"></i>{" "}
-                    provider.email_template.created
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>07/18/2023 2:27AM</TableCell>
-                  <TableCell>Demo Provider</TableCell>
-                  <TableCell>
-                    <i className="fa fa-info-circle"></i>{" "}
-                    provider.employee.created
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </Container>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={handleAPICall}
+                  endIcon={<i className="fa fa-search" />}
+                >
+                  Find Patients
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </WidgetBody>
+       { hide &&  <Table sx={{ minWidth: 650 }} className="table table-bordered">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <TableSortLabel active={false} direction="asc">
+                  Created
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel active={false} direction="asc">
+                  Employee
+                </TableSortLabel>
+              </TableCell>
+              {/* <TableCell>First Name</TableCell> */}
+              <TableCell>
+                <TableSortLabel active={false} direction="asc">
+                  Event
+                </TableSortLabel>
+              </TableCell>
+
+              {/* <TableCell>Actions</TableCell> */}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell>
+                  {moment(product.created_at).format("MM/DD/YYYY h:mm A")}
+                </TableCell>
+                <TableCell>{product.name ? product.name : ""}</TableCell>
+                <TableCell>{product.event ? product.event : "N/A"}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>}
+      </Widget>
     </Page>
   );
 };

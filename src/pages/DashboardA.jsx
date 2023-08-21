@@ -14,7 +14,6 @@ const DashboardA = () => {
 
 
   // to dynamic 
-  localStorage.setItem('token', JSON.stringify('4011|VQIHsdWVxa2iZfBKVHi8cvGoxji63owHP5LGBKKY'));
   return (
     <Page title="Provider Dashboard">
       {/* <div key="next-patient">
@@ -24,22 +23,24 @@ const DashboardA = () => {
       <div key="doctor-overall-appointment">
         <DoctorOverallAppointment />
       </div>
-      <div key="events-compact">
+      {/* <div key="events-compact">
         <EventsCompactCalendar />
+      </div> */}
+      <div key="daily-app-chart">
+        <DailyAppointmentChart />
       </div>
       <div key="laboratory-tests">
         <LaboratoryTests />
       </div>
-      <div key="daily-app-chart">
-        <DailyAppointmentChart />
-      </div>
-      <div key="doctor-upcoming-appointments">
-        <UpcomingAppointments />
-      </div>
 
-      {/* <div key="patients-pace">
+       {/* <div key="patients-pace">
                 <PatientsPace/>
             </div> */}
+      {/* <div key="doctor-upcoming-appointments">
+        <UpcomingAppointments />
+      </div> */}
+
+     
       {/* <div key="recent-questions">
         <RecentQuestions />
       </div> */}

@@ -52,10 +52,13 @@ export const Button = styled.button`
 
 const ShapeButton = ({hasNotification, icon, handler, label, shape, ...props}) => {
     return (
-        <Button className={shape} onClick={handler} aria-label={label} ref={props.ref} {...props}>
+      <>
+      {/* <Button className={shape} onClick={handler} aria-label={label} ref={props.ref} {...props}>
             <i className={`icon-${icon}`}></i>
             {hasNotification && <Badge className="badge" color="yellow" />}
-        </Button>
+        </Button> */}
+      </>
+        
     )
 }
 

@@ -129,7 +129,7 @@ function EditSms({ user, handleClose, open }) {
                 variant="outlined"
                 
                 multiline
-                value={content}
+                value={content || user?.content} 
                 onChange={ChangeContent}
                 fullWidth
                 required
@@ -146,7 +146,7 @@ function EditSms({ user, handleClose, open }) {
                 type="text"
                 variant="outlined"
                 multiline
-                value={companyName}
+                value={companyName || user?.name}
                 onChange={CompnaynameChange}
                 fullWidth
                 required

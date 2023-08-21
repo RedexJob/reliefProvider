@@ -6,7 +6,7 @@ import Widget from "@components/Widget";
 import WidgetBody from "@components/Widget/WidgetBody";
 import GenderNav from "@components/GenderNav";
 import MonthNavigator from "@ui/Navigator/MonthNavigator";
-import EditUser from './EditUsers'
+import EditUser from "./EditUsers";
 // import Group from './Group';
 import NoDataPlaceholder from "@components/NoDataPlaceholder";
 
@@ -30,23 +30,21 @@ import {
   TableSortLabel,
   Button,
   Box,
-
 } from "@mui/material";
 
-
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
-import  CrearteUsers from './CrearteUsers'
+import CrearteUsers from "./CrearteUsers";
 const CompanyUsers = () => {
   const contentRef = useRef(null);
 
@@ -56,7 +54,7 @@ const CompanyUsers = () => {
 
   const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState('sm');
+  const [maxWidth, setMaxWidth] = React.useState("sm");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,7 +67,7 @@ const CompanyUsers = () => {
   const handleMaxWidthChange = (event) => {
     setMaxWidth(
       // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value,
+      event.target.value
     );
   };
 
@@ -77,20 +75,18 @@ const CompanyUsers = () => {
     setFullWidth(event.target.checked);
   };
 
-  console.log(products,'products')
+  console.log(products, "products");
   const itemsPerPage = 10; // Number of items per page
-
 
   useEffect(() => {
     // Fetch data from the API
-    const token = "3952|yZfrkiN9ixDvjAirkmRo5TtUEY0xFWs1USuDKmbm";
     const items = JSON.parse(localStorage.getItem("token"));
     axios
       .get("https://medical.studiomyraa.com/api/get_provider_employee/1", {
         headers: { Authorization: ` Bearer ${items}` },
       })
       .then((response) => {
-        if (response.data  &&  Array.isArray(response.data.data)) {
+        if (response.data && Array.isArray(response.data.data)) {
           // Update the products state with the fetched data
 
           setProductData(response.data.data);
@@ -137,19 +133,26 @@ const CompanyUsers = () => {
     }, 1000);
   };
 
+  // State variables to manage selected user and edit dialog open state
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-    // State variables to manage selected user and edit dialog open state
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [editDialogOpen, setEditDialogOpen] = useState(false);
-  
-    // Function to handle opening the edit dialog for a particular user
-    const handleEditUser = (user) => {
-      setSelectedUser(user);
-      setEditDialogOpen(true);
-    };
+  // Function to handle opening the edit dialog for a particular user
+  const handleEditUser = (user) => {
+    setSelectedUser(user);
+    setEditDialogOpen(true);
+  };
 
   return (
     <Widget name="PatientsList">
+      <Button
+        variant="contained"
+        color="success"
+        onClick={handleClickOpen}
+        style={{ marginRight :"87rem"}}
+      >
+        Create
+      </Button>
       <WidgetBody style={{ padding: 0 }} elRef={contentRef}>
         <div className="card-body">
           <InfiniteScroll
@@ -169,7 +172,7 @@ const CompanyUsers = () => {
                   </TableCell>
                   <TableCell>
                     <TableSortLabel active={false} direction="asc">
-                     Email
+                      Email
                     </TableSortLabel>
                   </TableCell>
                   <TableCell>Enabled?</TableCell>
@@ -190,9 +193,13 @@ const CompanyUsers = () => {
                     <TableCell>{product.status}</TableCell>
                     <TableCell>{product.updated_at}</TableCell>
                     <TableCell>
-                      <Button variant="contained" color="success" onClick={handleClickOpen}>
+                      {/* <Button
+                        variant="contained"
+                        color="success"
+                        onClick={handleClickOpen}
+                      >
                         Add
-                      </Button>
+                      </Button> */}
                       <Button
                         variant="contained"
                         color="primary"
@@ -201,7 +208,6 @@ const CompanyUsers = () => {
                       >
                         Edit
                       </Button>
-                    
                     </TableCell>
                   </TableRow>
                 ))}
@@ -211,8 +217,12 @@ const CompanyUsers = () => {
           <br />
         </div>
       </WidgetBody>
-      
-      <EditUser user={selectedUser} handleClose={() => setEditDialogOpen(false)} open={editDialogOpen} />
+
+      <EditUser
+        user={selectedUser}
+        handleClose={() => setEditDialogOpen(false)}
+        open={editDialogOpen}
+      />
 
       <Dialog
         fullWidth={fullWidth}
@@ -221,7 +231,7 @@ const CompanyUsers = () => {
         onClose={handleClose}
       >
         <DialogTitle>Add Users</DialogTitle>
-        <CrearteUsers  handleClose={handleClose}/>
+        <CrearteUsers handleClose={handleClose} />
         {/* <DialogActions>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions> */}

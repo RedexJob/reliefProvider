@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import store from '@store/store'
 import {BrowserRouter} from 'react-router-dom';
 import {InterfaceContextAPI} from '@contexts/interfaceContext';
-
+import ToastContainer from './pages/MyToastContainer'
 // fonts
 import '@fontsource/rubik/300.css';
 import '@fontsource/rubik/400.css';
@@ -16,10 +16,12 @@ import '@fonts/icomoon/icomoon.woff'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
+
         <BrowserRouter>
             <InterfaceContextAPI>
                 <App/>
             </InterfaceContextAPI>
+            <ToastContainer/>
         </BrowserRouter>
     </Provider>
 );

@@ -396,7 +396,7 @@ const  ChangeLastname = (e) => {
                 </FormControl>
               </Grid>
             </Grid>
-            <Typography variant="h6" gutterBottom>
+            {/* <Typography variant="h6" gutterBottom>
               Product Description... need to done
             </Typography>
             <Typography variant="h6" gutterBottom>
@@ -405,7 +405,7 @@ const  ChangeLastname = (e) => {
 
             <Typography variant="h6" gutterBottom>
               Cannabinoids
-            </Typography>
+            </Typography> */}
             <Grid container spacing={2}>
               <Grid item xs={12} md={3}>
                 <FormControl fullWidth margin="normal">

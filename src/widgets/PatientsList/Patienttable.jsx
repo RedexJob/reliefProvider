@@ -48,7 +48,8 @@ const Patienttable = () => {
   const itemsPerPage = 10; // Number of items per page
   useEffect(() => {
     // Fetch data from the API
-    const token = "3691|dVlgSacqhxeyluycbpjRwulO1cETYyxZXwlxF5Au";
+   
+    const token = JSON.parse(localStorage.getItem("token"));
 
     axios
       .get("https://medical.studiomyraa.com/api/get_patient", {
@@ -72,49 +73,49 @@ const Patienttable = () => {
   }, []);
 
   // Function to fetch more data for infinite scrolling
-  const fetchMoreData = () => {
-    // Implement your API call here to fetch the next set of data based on currentPage
-    // Example:
-    // const nextPage = currentPage + 1;
-    // axios.get(`your-api-url?page=${nextPage}`).then((response) => {
-    //   if (response.data && Array.isArray(response.data.data)) {
-    //     // Update the products state with the new data
-    //     setProductData((prevData) => [...prevData, ...response.data.data]);
-    //     setCurrentPage(nextPage);
-    //   } else {
-    //     console.error("Invalid API response format:", response.data);
-    //   }
-    //   setHasMore(response.data.data.length > 0);
-    // }).catch((error) => {
-    //   console.error("Error fetching data:", error);
-    // });
+  // const fetchMoreData = () => {
+  //   // Implement your API call here to fetch the next set of data based on currentPage
+  //   // Example:
+  //   // const nextPage = currentPage + 1;
+  //   // axios.get(`your-api-url?page=${nextPage}`).then((response) => {
+  //   //   if (response.data && Array.isArray(response.data.data)) {
+  //   //     // Update the products state with the new data
+  //   //     setProductData((prevData) => [...prevData, ...response.data.data]);
+  //   //     setCurrentPage(nextPage);
+  //   //   } else {
+  //   //     console.error("Invalid API response format:", response.data);
+  //   //   }
+  //   //   setHasMore(response.data.data.length > 0);
+  //   // }).catch((error) => {
+  //   //   console.error("Error fetching data:", error);
+  //   // });
 
-    // Since we don't have a real API call in this example, we'll simulate fetching more data after a delay.
-    setTimeout(() => {
-      const nextPage = currentPage + 1;
-      const newData = Array.from({ length: itemsPerPage }, (_, index) => ({
-        id: `new-${nanoid()}`,
-        user_id: `User ${nextPage}-${index + 1}`,
-        // ... (other properties)
-      }));
-      setProductData((prevData) => [...prevData, ...newData]);
-      setCurrentPage(nextPage);
-      setHasMore(nextPage < 5);
-      // Assuming there are 5 pages in total
-    }, 1000);
-  };
+  //   // Since we don't have a real API call in this example, we'll simulate fetching more data after a delay.
+  //   setTimeout(() => {
+  //     const nextPage = currentPage + 1;
+  //     const newData = Array.from({ length: itemsPerPage }, (_, index) => ({
+  //       id: `new-${nanoid()}`,
+  //       user_id: `User ${nextPage}-${index + 1}`,
+  //       // ... (other properties)
+  //     }));
+  //     setProductData((prevData) => [...prevData, ...newData]);
+  //     setCurrentPage(nextPage);
+  //     setHasMore(nextPage < 5);
+  //     // Assuming there are 5 pages in total
+  //   }, 1000);
+  // };
 
   return (
     <Widget name="PatientsList">
       <WidgetBody style={{ padding: 0 }} elRef={contentRef}>
         <div className="card-body">
-          <InfiniteScroll
+          {/* <InfiniteScroll
             dataLength={products.length}
             next={fetchMoreData}
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
             scrollableTarget="content-container" // Replace "content-container" with the ID of the container that should have the scrolling behavior
-          >
+          > */}
             <Table sx={{ minWidth: 650 }} className="table table-bordered">
               <TableHead>
                 <TableRow>
@@ -184,7 +185,7 @@ const Patienttable = () => {
                 ))}
               </TableBody>
             </Table>
-          </InfiniteScroll>
+          {/* </InfiniteScroll> */}
           <br />
         </div>
       </WidgetBody>

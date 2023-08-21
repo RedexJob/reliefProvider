@@ -40,6 +40,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { width } from "@mui/system";
+import { createStore } from "@reduxjs/toolkit";
 function ShopMyCompany() {
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -61,6 +62,143 @@ function ShopMyCompany() {
     setRateD(!rateD);
   };
 
+  const [delevery, setDelevery] = useState(false);
+  const ChangeDelevery = (e) => {
+
+    console.log(e.target.checked,'delivery status')
+    setDelevery(e.target.checked);
+    
+  };
+
+  const [store, setStore] = useState(false);
+  const ChangeStore = (e) => {
+
+    console.log(e.target.checked,'store status')
+    setStore(e.target.checked);
+    
+  };
+
+  const [rate , setRate] = useState(false);
+  const ChangeRate = (e) => {
+    console.log(e.target.checked,'rate status')
+    setRate(e.target.checked);
+    
+  };
+
+
+  const handleAPICallStatus = async (event) => {
+
+    event.preventDefault();
+  
+    const formData = new FormData();
+    formData.append("free_delivery", delevery ? 'yes' : 'no');
+    formData.append("in_store_pickup", store ? 'yes' : 'no');
+    formData.append("flate_rate", rate ? 'yes' : 'no');
+    formData.append("company_id", companyId ? companyId :'');
+  
+    
+    const token = JSON.parse(localStorage.getItem("token"));
+     axios.post(
+        "https://medical.studiomyraa.com/api/provider_delivery_setting",
+        formData,
+        { headers: { "Accept": "application/json", Authorization: ` Bearer ${token}` }
+      })
+      
+      .catch( (error) =>{
+        console.error(error)
+      })
+  
+  
+  };
+
+  const [nameTo, setNameTo] = useState()
+
+  const ChangeName = (e) =>{
+    e.preventDefault();
+    setNameTo(e.target.value)
+  }
+
+ const [description, setDescription] = useState()
+
+ const ChangeDescription = (e) =>{
+  e.preventDefault();
+  setDescription(e.target.value)
+ }
+
+ const [companyId, setCompanyID] = useState('1')
+
+
+
+  const handleAPICall = async (event) => {
+
+    event.preventDefault();
+  
+    const formData = new FormData();
+    formData.append("name", nameTo ? nameTo : '');
+    formData.append("description", description ? description :'');
+    formData.append("id", companyId ? companyId :'');
+  
+    
+    const token = JSON.parse(localStorage.getItem("token"));
+     axios.post(
+        "https://medical.studiomyraa.com/api/update_provider_delivery_module_1",
+        formData,
+        { headers: { "Accept": "application/json", Authorization: ` Bearer ${token}` }
+      })
+      
+      .catch( (error) =>{
+        console.error(error)
+      })
+  
+  
+  };
+
+  const [amount,setAmount] = useState()
+
+  const ChangeAmount =(e) =>{
+    e.preventDefault();
+    setAmount(e.target.value)
+  }
+
+  const [nameTor, setNameTor] = useState()
+
+  const ChangeNameRate = (e) =>{
+    e.preventDefault();
+    setNameTor(e.target.value)
+  }
+ const [descriptionR, setDescriptionR] = useState()
+
+ const ChangeDescriptionRate = (e) =>{
+  e.preventDefault();
+  setDescriptionR(e.target.value)
+ }
+  const handleAPICallTwo = async (event) => {
+
+    event.preventDefault();
+  
+    const formData = new FormData();
+    formData.append("name", nameTor ? nameTor : '');
+    formData.append("amount", amount ? amount : '');
+    formData.append("description", descriptionR ? descriptionR :'');
+    formData.append("id", companyId ? companyId :'');
+
+    
+  
+    
+    const token = JSON.parse(localStorage.getItem("token"));
+     axios.post(
+        "https://medical.studiomyraa.com/api/update_delivery_module_2",
+        formData,
+        { headers: { "Accept": "application/json", Authorization: ` Bearer ${token}` }
+      })
+      
+      .catch( (error) =>{
+        console.error(error)
+      })
+  
+  
+  };
+  
   return (
     <>
       <Widget name="PatientsList">
@@ -75,7 +213,12 @@ function ShopMyCompany() {
                   <FormGroup>
                     <TableCell>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked />}
+                        control={
+                          <Checkbox
+                            onChange={ChangeDelevery}
+                            checked={delevery}
+                          />
+                        }
                         label="free delevery"
                       />
                       <Button variant="text" onClick={Chnagefree}>
@@ -86,14 +229,20 @@ function ShopMyCompany() {
 
                     <TableCell>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked />}
+                        control={<Checkbox 
+                          onChange={ChangeStore}
+                          checked={store}
+                           />}
                         label="In Store Pickup"
                       />
                     </TableCell>
 
                     <TableCell>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked />}
+                        control={<Checkbox 
+                          onChange={ChangeRate}
+                          checked={rate}
+                           />}
                         label="Flat Rate Delivery"
                       />
                       <Button variant="text" onClick={ChnageRate}>
@@ -107,6 +256,7 @@ function ShopMyCompany() {
                       variant="contained"
                       size="small"
                       style={{ height: "40px", width: "auto" }}
+                      onClick={handleAPICallStatus}
                     >
                       Publish Changes
                     </Button>
@@ -126,10 +276,8 @@ function ShopMyCompany() {
                           label="Name To Display"
                           id="provider_product_name"
                           name="provider_product_"
-                          // value={formData.provider_product_name}
-                          // onChange={handleChange}
-
-                          value=""
+                          value={nameTo}
+                          onChange={ChangeName}
                           required
                         />
                       </FormControl>
@@ -140,7 +288,8 @@ function ShopMyCompany() {
                           label="Description To Display"
                           id="provider_product_name_strain"
                           name="provider_product_name_strain"
-                          value=""
+                          value={description}
+                          onChange={ChangeDescription}
                           required
                         />
                       </FormControl>
@@ -153,6 +302,7 @@ function ShopMyCompany() {
                     color="primary"
                     size="large"
                     endIcon={<SaveIcon />}
+                    onClick={handleAPICall}
                   >
                     Save Changes
                   </Button>
@@ -169,12 +319,10 @@ function ShopMyCompany() {
                       <FormControl fullWidth margin="normal">
                         <TextField
                           label="Amount To Charge"
-                          id="provider_product_name"
+                          id="provider_product"
                           name="provider_product_"
-                          // value={formData.provider_product_name}
-                          // onChange={handleChange}
-
-                          value=""
+                          value={amount}
+                          onChange={ChangeAmount}
                           required
                         />
                       </FormControl>
@@ -183,12 +331,12 @@ function ShopMyCompany() {
                       <FormControl fullWidth margin="normal">
                         <TextField
                           label="Name To Display"
-                          id="provider_product_name"
+                          id="provider_"
                           name="provider_product_"
-                          // value={formData.provider_product_name}
-                          // onChange={handleChange}
+                          value={nameTor}
+                          onChange={ChangeNameRate}
 
-                          value=""
+                        
                           required
                         />
                       </FormControl>
@@ -199,7 +347,8 @@ function ShopMyCompany() {
                           label="Description To Display"
                           id="provider_product_name_strain"
                           name="provider_product_name_strain"
-                          value=""
+                          value={descriptionR}
+                          onChange={ChangeDescriptionRate}
                           required
                         />
                       </FormControl>
@@ -212,6 +361,7 @@ function ShopMyCompany() {
                     color="primary"
                     size="large"
                     endIcon={<SaveIcon />}
+                    onClick={handleAPICallTwo}
                   >
                     Save Changes
                   </Button>

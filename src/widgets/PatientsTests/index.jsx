@@ -113,7 +113,7 @@ console.log(products,'patientData')
 
 
   
-const token = "3691|dVlgSacqhxeyluycbpjRwulO1cETYyxZXwlxF5Au";
+
 
 const handleAPICall = async (event) => {
 
@@ -129,10 +129,12 @@ const handleAPICall = async (event) => {
   // formData.append("gender", email);
   formData.append("registry_id", regis_id ? regis_id :'');
 
+
+  const items = JSON.parse(localStorage.getItem("token"));
    axios.post(
       "https://medical.studiomyraa.com/api/find_patient",
       formData,
-      { headers: { "Accept": "application/json", Authorization: ` Bearer ${token}` }
+      { headers: { "Accept": "application/json", Authorization: ` Bearer ${items}` }
     })
     .then((response) =>{
 
@@ -140,6 +142,7 @@ const handleAPICall = async (event) => {
       if (response.data.data && Array.isArray(response.data.data)) {
         // Update the products state with the fetched data
         setProductData(response.data.data);
+        setHide(true)
       } else {
         console.error("Invalid API response format:", response.data);
         setProductData([]);
@@ -202,6 +205,8 @@ const [regis_id, setRegis_id] = useState();
 const  Changeregister = (e) => {
   setRegis_id(e.target.value);
 };
+
+const [hide,setHide] =useState(false)
   return (
     <Widget name="PatientsTests">
       <Header style={{ padding: 18 }}>
@@ -215,22 +220,23 @@ const  Changeregister = (e) => {
           />
           <MonthNavigator state={month} handler={setMonth} loop={false} />
         </div> */}
-        <SearchBar
+        {/* <SearchBar
           placeholder="Search patient details"
           handler={setSearch}
           value={search}
-        />
+        /> */}
       </Header>
       <WidgetBody style={{ padding: 18 }} elRef={contentRef}>
         {/* {filteredTests.length !== 0 ? drawTests() : <NoDataPlaceholder/>} */}
 
         <form name="patient_search" method="get">
           <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <TextField
                 label="First Name"
                 id="patient_search_firstName"
                 name="patient_search[firstName]"
+                type="text"
                 variant="outlined"
                 value={name}
                 onChange={Changename}
@@ -238,7 +244,7 @@ const  Changeregister = (e) => {
               />
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <TextField
                 label="Last Name"
                 id="patient_search_lastName"
@@ -250,7 +256,7 @@ const  Changeregister = (e) => {
               />
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <TextField
                 label="Middle Name"
                 id="patient_search_provincialHealthcareNumber"
@@ -261,7 +267,7 @@ const  Changeregister = (e) => {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <TextField
                 label="Email Address"
                 id="patient_search_email"
@@ -272,7 +278,7 @@ const  Changeregister = (e) => {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <TextField
                 label="Phone Number"
                 id="patient_search_phone"
@@ -283,7 +289,7 @@ const  Changeregister = (e) => {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel htmlFor="patient_search_gender">Gender</InputLabel>
                 <Select
@@ -301,7 +307,7 @@ const  Changeregister = (e) => {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <TextField
                 label="Date of Birth"
                 id="patient_search_birthdate"
@@ -337,7 +343,7 @@ const  Changeregister = (e) => {
                 </TextField>
               </TextField>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <TextField
                 label="OMMU Registry ID"
                 id="patient_search_provincialHealthcareNumber"
@@ -354,7 +360,7 @@ const  Changeregister = (e) => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                size="large"
+                size="small"
                 onClick={handleAPICall}
                 endIcon={<i className="fa fa-search" />}
               >
@@ -364,7 +370,7 @@ const  Changeregister = (e) => {
           </Grid>
         </form>
       </WidgetBody>
-      <Table sx={{ minWidth: 650 }} className="table table-bordered">
+     {hide && <Table sx={{ minWidth: 650 }} className="table table-bordered">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: 150, maxWidth: "25%" }}>
@@ -432,7 +438,7 @@ const  Changeregister = (e) => {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+            </Table>}
     </Widget>
   );
 };

@@ -1,6 +1,6 @@
 // styled components
 import {Menu, UserWrapper} from '../style';
-
+import { useNavigate } from 'react-router-dom';
 // components
 import Avatar from '@ui/Avatar';
 
@@ -9,31 +9,41 @@ import ClickAwayListener from '@mui/base/ClickAwayListener';
 import {useState} from 'react';
 
 // assets
-import doc1jpg from '@assets/avatars/doc1.jpg';
+import doc1jpg from '@assets/avatars/imgProfile.png';
 import doc1webp from '@assets/avatars/doc1.jpg?as=webp';
+// import  demoavtar from '@assets/avatars/demoavtar.png?as=webp';
 
 const CurrentUser = () => {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const handleClickAway = () => setOpen(false);
     const handleClick = () => setOpen(!open);
 
-    const src = {
-        jpg: doc1jpg,
-        webp: doc1webp
-    }
 
+
+    const LogoutDone = () =>{
+        localStorage.clear();
+        
+        window.location.reload(false)
+    }
+    const changeuser = () =>{
+        navigate("/my_account")
+    }
+    const userProfile = JSON.parse(localStorage.getItem("profile"));
+    console.log(userProfile,'userprofile')
+    const src = userProfile?.img
     return (
         <ClickAwayListener onClickAway={handleClickAway}>
             <UserWrapper>
-                <Avatar avatar={src} alt="avatar"/>
+                <Avatar  src={src ? src: doc1jpg} />
                 <div className="info">
-                    <span className="h3">Sallie McBride</span>
-                    <span className="position">Surgeon</span>
+                    <span className="h3">{userProfile?.name ? userProfile?.name :'N/A'}</span>
+                    <span className="position">{userProfile?.role}</span>
                     <Menu className={open ? 'visible' : ''}>
-                        <button>
+                        <button onClick={changeuser}>
                             <i className="icon icon-circle-user" /> Change user
                         </button>
-                        <button>
+                        <button onClick={LogoutDone}>
                             <i className="icon icon-logout" /> Logout
                         </button>
                     </Menu>

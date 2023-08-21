@@ -15,6 +15,8 @@ import {
 
 function UpdateThankYou({ user, handleClose, open }) {
 
+ 
+
   const [items, setItems] = useState([]);
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("token"));
@@ -105,7 +107,7 @@ function UpdateThankYou({ user, handleClose, open }) {
                 label="Name"
                 variant="outlined"
                 multiline
-                value={companyName}
+                value={companyName || user?.name}
                 onChange={CompnaynameChange}
                 fullWidth
                 required
@@ -122,7 +124,7 @@ function UpdateThankYou({ user, handleClose, open }) {
                 label="Subject"
                 variant="outlined"
                 multiline
-                value={email}
+                value={email || user?.subject}
                 onChange={ChangeEmail}
                 fullWidth
                 required
@@ -139,7 +141,7 @@ function UpdateThankYou({ user, handleClose, open }) {
                 label="Email Content"
                 variant="outlined"
                 multiline
-                value={content}
+                value={content || user?.content}
                 onChange={ChangeContent}
                 fullWidth
                 required

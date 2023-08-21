@@ -32,11 +32,13 @@ const Wrapper = styled.a`
 `
 
 const Text = styled.span`
+
   font-weight: 700;
   font-family: ${fonts.accent};
   font-size: ${textSizes['24']};
 
   .highlight {
+
     color: ${theme('theme', {
       light: colors.blue,
       dark: 'inherit'
@@ -51,11 +53,12 @@ const Text = styled.span`
 const Logo = ({compact}) => {
     return (
         <Wrapper as={NavLink} to="/dashboard_a" className="logo">
-            <Img src={logo} alt="Medux"/>
+            {/* <Img src={logo} alt="Medux"/> */}
             {
                 !compact ?
                     <Text>
-                        med<span className="highlight">ux</span>
+                        Provider
+                        <span className="highlight" style={{fontSize:'12px'}}>Dispensaries</span>
                     </Text>
                     : null
             }

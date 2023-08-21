@@ -8,11 +8,11 @@ import {Badge} from '@ui/Badge/style';
 const Emergency = () => {
     return (
         <Container>
-            <ButtonWrapper>
+            {/* <ButtonWrapper>
                 <ShapeButton as="a" icon="microphone" label="Emergency help" shape="square" href="tel:911" />
                 <Badge className="indicator" color="red"/>
             </ButtonWrapper>
-            <Label>Emergency</Label>
+            <Label>Emergency</Label> */}
         </Container>
     )
 }

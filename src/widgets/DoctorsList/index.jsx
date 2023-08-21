@@ -109,11 +109,6 @@ const DoctorsList = () => {
 
   const [products, setProductData] = useState([]);
 
-console.log(products,'patientData')
-
-
-  
-const token = "3691|dVlgSacqhxeyluycbpjRwulO1cETYyxZXwlxF5Au";
 
 
 
@@ -130,7 +125,8 @@ const handleAPICall = async (event) => {
   //formData.append("dob", dob);
   formData.append("status", status ? status :'');
   formData.append("total_amount", regis_id ? regis_id :'');
-
+  
+  const token = JSON.parse(localStorage.getItem("token"));
    axios.post(
       "https://medical.studiomyraa.com/api/find_order",
       formData,
@@ -142,6 +138,7 @@ const handleAPICall = async (event) => {
       if (response.data.data && Array.isArray(response.data.data)) {
         // Update the products state with the fetched data
         setProductData(response.data.data);
+        setHide(true)
       } else {
         console.error("Invalid API response format:", response.data);
         setProductData([]);
@@ -204,6 +201,9 @@ const [regis_id, setRegis_id] = useState();
 const  Changeregister = (e) => {
   setRegis_id(e.target.value);
 };
+
+const [hide, setHide] = useState(false)
+
   return (
     <Widget name="PatientsTests">
       <Header style={{ padding: 18 }}>
@@ -217,11 +217,11 @@ const  Changeregister = (e) => {
           />
           <MonthNavigator state={month} handler={setMonth} loop={false} />
         </div> */}
-        <SearchBar
+        {/* <SearchBar
           placeholder="Search patient details"
           handler={setSearch}
           value={search}
-        />
+        /> */}
       </Header>
       <WidgetBody style={{ padding: 18 }} elRef={contentRef}>
         {/* {filteredTests.length !== 0 ? drawTests() : <NoDataPlaceholder/>} */}
@@ -338,7 +338,7 @@ const  Changeregister = (e) => {
           </Grid>
         </form>
       </WidgetBody>
-      <Table sx={{ minWidth: 650 }} className="table table-bordered">
+     { hide &&  <Table sx={{ minWidth: 650 }} className="table table-bordered">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: 150, maxWidth: "25%" }}>
@@ -406,7 +406,7 @@ const  Changeregister = (e) => {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+            </Table>}
     </Widget>
   );
 };

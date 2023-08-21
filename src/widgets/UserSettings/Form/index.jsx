@@ -46,6 +46,8 @@ const Form = ({type}) => {
         setCities(options);
     }
 
+    
+
     return (
         <StyledForm action="#" method="post" id={`settings_${type}`} onSubmit={e => e.preventDefault()}>
             <div className="wrapper">

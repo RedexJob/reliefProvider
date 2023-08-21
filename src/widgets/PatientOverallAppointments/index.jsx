@@ -83,7 +83,7 @@ const PatientOverallAppointments = () => {
 
     return (
         <Widget name="PatientOverallAppointments" shadow={true}>
-            <WidgetHeader title="Overall appointments" flex="column" style={{paddingBottom: 8}}>
+            <WidgetHeader title="Overall Appointment" flex="column" style={{paddingBottom: 8}}>
                 <ChartLegend/>
             </WidgetHeader>
             <WidgetBody style={{justifyContent: 'flex-end'}}>

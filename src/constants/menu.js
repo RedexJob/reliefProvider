@@ -5,24 +5,24 @@ export const menu = [
         name: 'dashboard',
         link:  '/dashboard_a'
     },
-    {
-        cat: 'dashboard',
-        icon: 'blocks',
-        links: [
-            { name: "Dashboard A", link: '/dashboard_a' },
-            { name: "Dashboard B", link: '/dashboard_b' },
-            { name: "Dashboard C", link: '/dashboard_c' },
-            { name: "Dashboard D", link: '/dashboard_d' },
-            { name: "Dashboard E", link: '/dashboard_e' },
-            { name: "Dashboard F", link: '/dashboard_f' },
-            { name: "Dashboard G", link: '/dashboard_g' },
-            { name: "Dashboard H", link: '/dashboard_h' },
-            { name: "Dashboard I", link: '/dashboard_i' },
-            { name: "Dashboard J", link: '/dashboard_j' },
-            { name: "Dashboard K", link: '/dashboard_k' },
-            { name: "Page 404", link: '/404' },
-        ]
-    },
+    // {
+    //     cat: 'dashboard',
+    //     icon: 'blocks',
+    //     links: [
+    //         { name: "Dashboard A", link: '/dashboard_a' },
+    //         { name: "Dashboard B", link: '/dashboard_b' },
+    //         { name: "Dashboard C", link: '/dashboard_c' },
+    //         { name: "Dashboard D", link: '/dashboard_d' },
+    //         { name: "Dashboard E", link: '/dashboard_e' },
+    //         { name: "Dashboard F", link: '/dashboard_f' },
+    //         { name: "Dashboard G", link: '/dashboard_g' },
+    //         { name: "Dashboard H", link: '/dashboard_h' },
+    //         { name: "Dashboard I", link: '/dashboard_i' },
+    //         { name: "Dashboard J", link: '/dashboard_j' },
+    //         { name: "Dashboard K", link: '/dashboard_k' },
+    //         { name: "Page 404", link: '/404' },
+    //     ]
+    // },
 
     {
         cat: 'patients',
@@ -43,7 +43,7 @@ export const menu = [
 
     {
         cat: 'Products',
-        icon: 'stethoscope',
+        icon: 'wallet',
         links: [
             { name: "Add Product", link: '/add_product' },
             { name: "View Product", link: '/view_product' }
@@ -73,13 +73,13 @@ export const menu = [
     },
     {
         
-        icon: 'star',
+        icon: 'users',
         name: 'My Account',
         link: '/my_account' ,
     },
     {
         
-        icon: 'star',
+        icon: 'settings',
         name: 'Manange Company',
         link: '/manage_company' ,
     },
@@ -92,24 +92,24 @@ export const menu = [
     },
 
 
-    {
-        cat: 'reviews',
-        icon: 'star',
-        links: [
-            { name: "Doctor Reviews", link: '/doctor_reviews' },
-            { name: "Patient Reviews", link: '/patient_reviews' }
-        ]
-    },
-    {
-        icon: 'wallet',
-        name: 'Finances',
-        link: '/finances'
-    },
-    {
-        icon: 'settings',
-        name: 'Settings',
-        link: '/settings'
-    }
+    // {
+    //     cat: 'reviews',
+    //     icon: 'star',
+    //     links: [
+    //         { name: "Doctor Reviews", link: '/doctor_reviews' },
+    //         { name: "Patient Reviews", link: '/patient_reviews' }
+    //     ]
+    // },
+        // {
+        //     icon: 'wallet',
+        //     name: 'Finances',
+        //     link: '/finances'
+        // },
+    // {
+    //     icon: 'settings',
+    //     name: 'Settings',
+    //     link: '/settings'
+    // }
     // {
     //     icon: 'settings',
     //     name: 'login',

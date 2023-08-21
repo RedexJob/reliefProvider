@@ -59,25 +59,11 @@ function CouponDiscount() {
     setOpen(false);
   };
 
-//   const DeleteData = () => {
-//     let person = prompt(
-//       "Are you sure you want to delete this coupon!! then type - YES",
-//       " YES"
-//     );
-  
-//     // Convert the input to lowercase and remove leading/trailing spaces
-//     person = person.trim().toLowerCase();
-//     console.log(person, "person");
-  
-//     if (person === "yes") {
-//       alert("deleted");
-//     } else {
-//       alert("cancel");
-//     }
-//   };
 
 
-const DeleteData = async () => {
+ const  DeleteData = async (id) => {
+
+
     let person = prompt(
       "Are you sure you want to delete this coupon!! then type - YES",
       "YES"
@@ -88,8 +74,9 @@ const DeleteData = async () => {
       const providerCompanyId = 1; // Replace with the actual provider_company_id
       const name = "Coupon Name"; // Replace with the actual coupon name
       const length = 10; // Replace with the actual length
-      const token = "3952|yZfrkiN9ixDvjAirkmRo5TtUEY0xFWs1USuDKmbm"; // Replace with the actual authorization token
   
+  
+      const token = JSON.parse(localStorage.getItem("token"));
       // Create a new FormData and append the parameters as URL parameters
       const formData = new FormData();
       formData.append("provider_company_id", providerCompanyId);
@@ -98,7 +85,7 @@ const DeleteData = async () => {
   
       try {
         const response = await axios.delete(
-          "https://medical.studiomyraa.com/api/delete_providers_coupons/2",
+          `https://medical.studiomyraa.com/api/delete_providers_coupons/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -223,7 +210,7 @@ const DeleteData = async () => {
                       <Button
                         variant="outlined"
                         style={{ color: "red", marginLeft: "5px" }}
-                        onClick={DeleteData}
+                        onClick={ () => DeleteData(product.id)}
                         startIcon={<DeleteIcon />}
                       >
                         Delete

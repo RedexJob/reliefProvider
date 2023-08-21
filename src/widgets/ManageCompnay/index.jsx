@@ -28,7 +28,7 @@ const UserSettingsC = () => {
                         <TabNav>
                             <TabNavItem eventKey="Information" title="Information" />
                             <TabNavItem eventKey="Users" title="Users" />
-                            <TabNavItem eventKey="Appoint" title="Appointment" />
+                            {/* <TabNavItem eventKey="Appoint" title="Appointment" /> */}
                             <TabNavItem eventKey="Shop" title="Shop" />
                             
                             <TabNavItem eventKey="CandD" title=" Coupons" />
